@@ -48,4 +48,30 @@ $ hostname --ip-address
 
 
 ## Шаг 3. Установка Proxmox
+Добавляем в список репозиториев официальный репозиторий Proxmox и стандартные репозитории debian. В этом примере использованы оригинальные репозитории, все остальное можно закомментировать:
+``` bash
+$ sudo vim /etc/apt/sources.list
+```
+``` bash
+deb http://mirror.corbina.net/debian/ buster main non-free contrib
+deb-src http://mirror.corbina.net/debian/ buster main non-free contrib
+deb http://download.proxmox.com/debian/pve buster pve-no-subscription
+```
+И добавляем цифровую подпись Proxmox репозитория:
+``` bash
+$ sudo wget http://download.proxmox.com/debian/proxmox-ve-release-6.x.gpg -O /etc/apt/trusted.gpg.d/proxmox-ve-release-6.x.gpg
+```
+Теперь следует обновить систему и перегрузить ее:
+``` bash
+$ sudo apt update -y && sudo apt full-upgrade
+```
+``` bash
+$ sudo reboot
+```
+После перезагрузки устанавливаем систему виртуализации Proxmox:
+``` bash
+$ sudo apt install -y proxmox-ve postfix open-iscsi
+```
+Если получите ошибку после установки во время запуска службы `pve-cluster.service`, внимательно проверяйте на правильность файл hosts. В нем не должно быть никаких дополнительный строк (даже пустых).
+
 
